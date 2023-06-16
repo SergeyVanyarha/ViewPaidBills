@@ -26,7 +26,7 @@ class GetPaidBills(models.TransientModel):
         result.update({
             'domain': [
                 ('id', 'in', move_ids),
-                ('payment_state', 'in', ['paid', 'partial'])
+                ('payment_state', 'in', ['paid', 'partial', 'in_payment'])
             ],
         })
         return result
