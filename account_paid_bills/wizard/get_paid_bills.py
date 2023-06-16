@@ -15,17 +15,18 @@ class GetPaidBills(models.TransientModel):
         reconcile_records = self.env['account.partial.reconcile'].search([
             ('max_date', '>=', self.date_from),
             ('max_date', '<=', self.date_to),
+            ('company_id', 'in', self.env.context.get('allowed_company_ids')),
         ])
 
-        # Get all invoices with payment_state = 'paid' or 'partial' and move_type = 'in_invoice'
-        account_moves = reconcile_records.mapped('credit_move_id.move_id')
-        move_ids = account_moves.filtered(lambda x:
-                                          x.payment_state in ['paid', 'partial'] and
-                                          x.move_type == 'in_invoice').ids
+        # Get all invoices from reconciles
+        move_ids = reconcile_records.mapped('credit_move_id.move_id').ids
 
         # Return action window with invoices
         result = self.env['ir.actions.act_window']._for_xml_id('account.action_move_in_invoice_type')
         result.update({
-            'domain': [('id', 'in', move_ids)],
+            'domain': [
+                ('id', 'in', move_ids),
+                ('payment_state', 'in', ['paid', 'partial'])
+            ],
         })
         return result

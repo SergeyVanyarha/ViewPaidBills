@@ -1,7 +1,7 @@
 # License OPL-1 (https://www.odoo.com/documentation/16.0/legal/licenses.html).
 {
     'name': 'Account Paid Bills',
-    'version': '16.0.1.0.0',
+    'version': '16.0.1.0.1',
     'summary': 'Account Paid Bills',
     'description': 'Account Paid Bills',
     'category': 'All',
